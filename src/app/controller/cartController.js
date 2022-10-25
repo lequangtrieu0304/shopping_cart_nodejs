@@ -83,6 +83,12 @@ exports.addProductQuantityFromCart = async (req, res) => {
             cart.items[itemFound].total = cart.items[itemFound].quantity * cart.items[itemFound].productId.price;
             cart.subTotal = cart.items.map(item => item.total).reduce((acc, next) => acc + next);
         }
+        else {
+            return res.status(400).json({
+                type: 'Fail',
+                msg: 'not found item in cart',  
+            })
+        }
         let data = await cart.save();
         res.status(200).json({
             type: "success",
@@ -115,6 +121,12 @@ exports.SubtractProductQuantityFromCart = async (req, res) => {
             if (cart.items[itemFound].quantity === 0) {
                 cart.items.splice(itemFound, 1);
             }
+        }
+        else {
+            return res.status(400).json({
+                type: 'Fail',
+                msg: 'not found item in cart',  
+            })
         }
         let data = await cart.save();
         res.status(200).json({
@@ -180,6 +192,28 @@ exports.removeItem = async (req, res) => {
         })
     }
     catch (err) {
+        console.log(err);
+        res.status(400).json({
+            type: "Invalid",
+            msg: "Something Went Wrong",
+            err: err
+        });
+    }
+}
+
+exports.emptyCart = async (req, res) => {
+    try{
+        let cart = await cartRepository.cart();
+        cart.items = [];
+        cart.subTotal = 0;
+        let data = await cart.save();
+        res.status(200).json({
+            type: 'success',
+            msg: 'Cart has been emptied',
+            data: data
+        })
+    }
+    catch(err){
         console.log(err);
         res.status(400).json({
             type: "Invalid",

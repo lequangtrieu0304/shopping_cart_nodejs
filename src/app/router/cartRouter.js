@@ -12,4 +12,6 @@ router.get('/subtract-cart/:id', cartController.SubtractProductQuantityFromCart)
 
 router.get('/delete-item/:id', cartController.removeItem)
 
+router.delete('/empty-cart', cartController.emptyCart)
+
 module.exports = router;
