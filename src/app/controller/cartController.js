@@ -183,6 +183,11 @@ exports.removeItem = async (req, res) => {
             else {
                 cart.subTotal = cart.items.map(item => item.total).reduce((acc, next) => acc + next);
             }
+        } else {
+            return res.status(400).json({
+                type: 'Fail',
+                msg: 'not found item in cart',  
+            })
         }
         let data = await cart.save();
         res.status(200).json({
