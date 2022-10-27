@@ -5,7 +5,7 @@ exports.createProduct = async (req, res) => {
         let payload = {
             name : req.body.name,
             price: req.body.price,
-            image: req.body.image
+            image: req.file.path
         }
         let product = await productRepository.createProduct({
             ...payload
